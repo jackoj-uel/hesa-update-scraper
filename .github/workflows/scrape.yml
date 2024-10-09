@@ -2,8 +2,8 @@ name: Scrape HESA News
 
 on:
   schedule:
-    - cron: '0 9 * * *'
-  workflow_dispatch:
+    - cron: '0 9 * * *'  # Runs daily at 9 AM UTC
+  workflow_dispatch:     # Allows manual triggering
 
 jobs:
   scrape:
@@ -11,12 +11,10 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
-      with:
-        persist-credentials: false  # Important to disable to use our PAT
+      uses: actions/checkout@v3   # Updated to version 3
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v4   # Updated to version 4
       with:
         python-version: '3.x'
 
@@ -30,11 +28,9 @@ jobs:
         python scraper.py
 
     - name: Commit and push updates
-      uses: stefanzweifel/git-auto-commit-action@v4
-      with:
-        commit_message: "Update scraped HESA news"
-        file_pattern: updates.json
-        branch: main
-        commit_user_name: GitHub Actions
-        commit_user_email: [email protected]
-        token: ${{ secrets.PAT_TOKEN }}
+      run: |
+        git config --global user.name 'GitHub Actions'
+        git config --global user.email '[email protected]'
+        git add updates.json
+        git commit -m "Update scraped HESA news"
+        git push
