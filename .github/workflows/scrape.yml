@@ -3,6 +3,7 @@ name: Scrape HESA News
 on:
   schedule:
     - cron: '0 9 * * *'  # Runs daily at 9 AM UTC
+  workflow_dispatch:     # Allows manual triggering
 
 jobs:
   scrape:
@@ -10,15 +11,16 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3  # Updated to v3 for Node 16+ support
+      uses: actions/checkout@v3
 
     - name: Set up Python
-      uses: actions/setup-python@v4  # Updated to v4 for Node 16+ support
+      uses: actions/setup-python@v4
       with:
         python-version: '3.x'
 
     - name: Install dependencies
       run: |
+        pip install --upgrade pip
         pip install requests beautifulsoup4
 
     - name: Run scraping script
